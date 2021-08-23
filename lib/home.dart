@@ -205,8 +205,8 @@ class _HomeState extends State<Home> {
                                               borderRadius: BorderRadius.circular(25.sp),
                                               child: Container(
                                                 color: Color(0xFFA29F9F),
-                                                height: 250.sp,
-                                                width: 200.sp,
+                                                height: 220.sp,
+                                                width: 180.sp,
                                                 child: Center(
                                                   child: Text(
                                                     "${a[ind]}",

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'database.dart';
+import '../database.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class _SignupState extends State<Signup> {
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController ageController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   void registerToFb() async{
     await Firebase.initializeApp();
@@ -26,7 +26,7 @@ class _SignupState extends State<Signup> {
         .createUserWithEmailAndPassword(
         email: emailController.text, password: passwordController.text)
         .then((result) async {
-          await Database(uid:result.user.uid).data(emailController.text,nameController.text,ageController.text);
+          await Database(uid:result.user.uid).data(emailController.text,nameController.text,phoneController.text);
          Navigator.popAndPushNamed(context, '/home');
 
     }).catchError((err) {
@@ -57,7 +57,7 @@ class _SignupState extends State<Signup> {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
-    ageController.dispose();
+    phoneController.dispose();
   }
 
   @override
@@ -143,16 +143,16 @@ class _SignupState extends State<Signup> {
                Padding(
                  padding: EdgeInsets.all(20.0),
                  child: TextFormField(
-                   controller: ageController,
+                   controller: phoneController,
                    decoration: InputDecoration(
-                       labelText: "Enter Age",
+                       labelText: "Enter Phone Number",
                        enabledBorder: OutlineInputBorder(
                            borderRadius: BorderRadius.circular(10.0)
                        )
                    ),
                    validator: (value){
                      if(value.isEmpty){
-                       return 'Enter Age';
+                       return 'Enter Phone Number';
                      }
                      return null;
                    },

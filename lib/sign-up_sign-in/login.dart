@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -10,13 +11,18 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   double widget1Opacity = 1.0;
 
-  void initlogin(){
+  void initlogin() async{
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
         firebaseAuth.authStateChanges()
-        .listen((User user) {
+        .listen((User user)async {
       if (user == null) {} else {
+        DocumentReference ref= Firestore.instance.collection('users').document(firebaseAuth.currentUser.uid);
+        DocumentSnapshot doc =await ref.get();
+        if(doc['role']=='user')
        Navigator.popAndPushNamed(context, '/home');
+        else if(doc['role']=='admin')
+          Navigator.popAndPushNamed(context, '/admin');
       }
     });
   }
@@ -63,7 +69,7 @@ class _LoginState extends State<Login> {
                     children: [
                       InkWell(
                         onTap: (){
-                          Navigator.popAndPushNamed(context, '/signin');
+                          Navigator.popAndPushNamed(context, '/user_type');
                         },
                         child: Container(
                           decoration: BoxDecoration(

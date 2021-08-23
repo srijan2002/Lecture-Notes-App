@@ -3,15 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'database.dart';
+import '../database.dart';
 
-class Signin extends StatefulWidget {
+class Admin_Sign extends StatefulWidget {
   @override
-  _SigninState createState() => _SigninState();
+  _AdminSignState createState() => _AdminSignState();
 }
 
-class _SigninState extends State<Signin> {
+class _AdminSignState extends State<Admin_Sign> {
 
 
 
@@ -24,13 +23,25 @@ class _SigninState extends State<Signin> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  Future <String> Get(String Doc) async
+  {
+    DocumentReference ref= Firestore.instance.collection('users').document(Doc);
+    DocumentSnapshot doc =await ref.get();
+    return doc['role'];
+
+  }
 
   void registerToFb() async{
     await Firebase.initializeApp();
     firebaseAuth
         .signInWithEmailAndPassword(
         email: emailController.text, password: passwordController.text)
-         .then((value) => Navigator.popAndPushNamed(context, '/home')).catchError((err) {
+        .then((value) async{
+      String x= await Get(firebaseAuth.currentUser.uid);
+      if(x=='admin')
+        Navigator.popAndPushNamed(context, '/admin');
+    })
+        .catchError((err) {
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -71,7 +82,7 @@ class _SigninState extends State<Signin> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: (){
-              Navigator.popAndPushNamed(context, '/login');
+              Navigator.popAndPushNamed(context, '/user_type');
             }
         ),
       ),
