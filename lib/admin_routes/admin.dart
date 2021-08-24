@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:sizer/sizer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:video_app/admin_routes/users_list.dart';
-import 'users_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:video_app/models/user.dart';
 import 'dart:convert';
@@ -17,7 +15,7 @@ class Admin extends StatefulWidget {
 
 class _AdminState extends State<Admin> {
   GlobalKey<ScaffoldState> _scaffold = GlobalKey<ScaffoldState>();
-   int a=0,bb=0,c=0,d=0;
+   int a=0,bb=0,c=0,d=0; int j=0;
   Future <void> logout() async{
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     await firebaseAuth.signOut();
@@ -26,25 +24,25 @@ class _AdminState extends State<Admin> {
   List allData=[""];
   List b= []; List id=[];
   void Getdata()async{
+    j=0; b=[];id=[];
     CollectionReference _collectionRef =
     FirebaseFirestore.instance.collection('users');
     QuerySnapshot querySnapshot = await _collectionRef.get();
-    allData = querySnapshot.docs.map((doc) => doc.data()).toList(); int j=0;
-
-    print(allData.length);
+    allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     for(var i=0;i<allData.length;i++) {
-      if (allData[i]['role'] != 'admin')
-      {
+      if (allData[i]['role'] != 'admin') {
         setState(() {
           b.add(allData[i]['name']);
-          id.add(allData[i]);
+          id.add(allData[i]); j++;
         });
       }
     }
-    if(b==null)
-      b[0]="No Users Yet !";
+  if(j==0){
+    setState(() {
+      b=["No Users Yet !"];
+    });
+  }
 
-    print(b);
   }
 
   @override
@@ -114,46 +112,65 @@ class _AdminState extends State<Admin> {
                   }
               ),
             ),
-             body:
-              Column(
-               children: [
-                 Padding(
-                   padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
-                   child: Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                     children: [
-                       InkWell(
-                         onTap: (){
-                         setState(() {
-                           a=1;bb=0;c=0;d=0;
-                           Getdata();
-                         });
+             body: Column(
+                 children: [
+                   Padding(
+                     padding: const EdgeInsets.fromLTRB(5, 20, 5, 0),
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                       children: [
+                         InkWell(
+                           onTap: (){
+                             setState(() {
+                               a=1;bb=0;c=0;d=0;
+                               Getdata();
+                             });
                            },
-                         child: Container(
-                           decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(12),
-                             color: Colors.white
+                           child: Container(
+                             decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(12),
+                                 color: Colors.white
+                             ),
+                             child: Padding(
+                               padding: const EdgeInsets.all(9.0),
+                               child: Text(
+                                 "Users",
+                                 style: TextStyle(
+                                     fontFamily: 'MontB',
+                                     fontSize: 14.sp,
+                                     fontWeight: FontWeight.w600,
+                                     color: Colors.black
+                                 ),
+                               ),
+                             ),
                            ),
-                           child: Padding(
-                             padding: const EdgeInsets.all(9.0),
-                             child: Text(
-                               "Users",
-                               style: TextStyle(
-                                 fontFamily: 'MontB',
-                                 fontSize: 14.sp,
-                                 fontWeight: FontWeight.w600,
-                                 color: Colors.black
+                         ), InkWell(
+                           onTap: (){
+                             setState(() {
+                               a=0;bb=1;c=0;d=0;
+                               Navigator.pushNamed(context, '/home');
+                             });
+                           },
+                           child: Container(
+                             decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(12),
+                                 color: Colors.white
+                             ),
+                             child: Padding(
+                               padding: const EdgeInsets.all(9.0),
+                               child: Text(
+                                 "Categories",
+                                 style: TextStyle(
+                                     fontFamily: 'MontB',
+                                     fontSize: 14.sp,
+                                     fontWeight: FontWeight.w600,
+                                     color: Colors.black
+                                 ),
                                ),
                              ),
                            ),
                          ),
-                       ), InkWell(
-                         onTap: (){
-                           setState(() {
-                             a=0;bb=1;c=0;d=0;
-                           });
-                         },
-                         child: Container(
+                         Container(
                            decoration: BoxDecoration(
                                borderRadius: BorderRadius.circular(12),
                                color: Colors.white
@@ -161,7 +178,24 @@ class _AdminState extends State<Admin> {
                            child: Padding(
                              padding: const EdgeInsets.all(9.0),
                              child: Text(
-                               "Categories",
+                               "Add",
+                               style: TextStyle(
+                                   fontFamily: 'MontB',
+                                   fontSize: 14.sp,
+                                   fontWeight: FontWeight.w600,
+                                   color: Colors.black
+                               ),
+                             ),
+                           ),
+                         ), Container(
+                           decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(12),
+                               color: Colors.white
+                           ),
+                           child: Padding(
+                             padding: const EdgeInsets.all(9.0),
+                             child: Text(
+                               "New",
                                style: TextStyle(
                                    fontFamily: 'MontB',
                                    fontSize: 14.sp,
@@ -171,109 +205,74 @@ class _AdminState extends State<Admin> {
                              ),
                            ),
                          ),
-                       ),
-                       Container(
-                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(12),
-                             color: Colors.white
-                         ),
-                         child: Padding(
-                           padding: const EdgeInsets.all(9.0),
-                           child: Text(
-                             "Add",
-                             style: TextStyle(
-                                 fontFamily: 'MontB',
-                                 fontSize: 14.sp,
-                                 fontWeight: FontWeight.w600,
-                                 color: Colors.black
-                             ),
-                           ),
-                         ),
-                       ), Container(
-                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.circular(12),
-                             color: Colors.white
-                         ),
-                         child: Padding(
-                           padding: const EdgeInsets.all(9.0),
-                           child: Text(
-                             "New",
-                             style: TextStyle(
-                                 fontFamily: 'MontB',
-                                 fontSize: 14.sp,
-                                 fontWeight: FontWeight.w600,
-                                 color: Colors.black
-                             ),
-                           ),
-                         ),
-                       ),
-                     ],
+                       ],
+                     ),
                    ),
-                 ),
-                 SizedBox(height: 40,),
-                 if(a==1)
-          Container(
-          color: Colors.black,
-          child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: b.length,
-          itemBuilder: (context,index){
-          return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 5, 25, 0),
-          child: Card(
-          shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12)
-          ),
-          child: InkWell(
-            onTap: (){
-           user = Data.fromJson(id[index]);
-           Navigator.popAndPushNamed(context,'/user_detail');
-            },
-            child: Container(
-            height: 35,
-            width: 60,
+                   SizedBox(height: 40,),
+                   if(a==1)
+                          Expanded(
+                            child: Container(
+                               color: Colors.black,
+                               child: ListView.builder(
+                                 shrinkWrap: true,
+                                 itemCount: b.length,
+                                 itemBuilder: (context,index){
+                                   return Padding(
+                                     padding: const EdgeInsets.fromLTRB(20, 5, 25, 0),
+                                     child: Card(
+                                       shape: RoundedRectangleBorder(
+                                           borderRadius: BorderRadius.circular(12)
+                                       ),
+                                       child: InkWell(
+                                         onTap: (){
+                                          if(j!=0){
+                                            print(id[index]);
+                                            user = Data.fromJson(id[index]);
+                                            Navigator.pushNamed(context,'/user_detail');
+                                          }
+                                         },
+                                         child: Container(
+                                           height: 35,
+                                           width: 60,
 
-            child: Center(
-            child: Text(
-            "${b[index]}",
-            style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'MontB',
-            fontWeight: FontWeight.w600,
-            fontSize: 14
-            ),
-            ),
-            ),
-            ),
-          ),
-          ),
-          );
-          },
-          ),
-          )
-                 else
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 100, 5, 0),
-                    child: Center(
-                      child: Text(
-                        "Welcome Admin",
-                        style: TextStyle(
-                          fontSize: 19.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'MontB',
-                          color: Color(0xFF555555)
-                        ),
-                      ),
-                    ),
-                  )
-
-               ],
-             ),
-
-
+                                           child: Center(
+                                             child: Text(
+                                               "${b[index]}",
+                                               style: TextStyle(
+                                                   color: Colors.black,
+                                                   fontFamily: 'MontB',
+                                                   fontWeight: FontWeight.w600,
+                                                   fontSize: 14
+                                               ),
+                                             ),
+                                           ),
+                                         ),
+                                       ),
+                                     ),
+                                   );
+                                 },
+                               ),
+                             ),
+                          )
+                   else
+                     Padding(
+                       padding: const EdgeInsets.fromLTRB(5, 100, 5, 0),
+                       child: Center(
+                         child: Text(
+                           "Welcome Admin",
+                           style: TextStyle(
+                               fontSize: 19.sp,
+                               fontWeight: FontWeight.w600,
+                               fontFamily: 'MontB',
+                               color: Color(0xFF555555)
+                           ),
+                         ),
+                       ),
+                     )
+                 ],
+               ),
           );
         }
-
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../database.dart';
+import 'package:video_app/models/role.dart';
 
 class Admin_Sign extends StatefulWidget {
   @override
@@ -38,8 +38,11 @@ class _AdminSignState extends State<Admin_Sign> {
         email: emailController.text, password: passwordController.text)
         .then((value) async{
       String x= await Get(firebaseAuth.currentUser.uid);
-      if(x=='admin')
+      if(x=='admin') {
+        Map map = {'role':'admin'};
+        roll = Role.fromJson(map);
         Navigator.popAndPushNamed(context, '/admin');
+      }
     })
         .catchError((err) {
       showDialog(

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
-import '../database.dart';
+import '../services/database.dart';
+import 'package:video_app/models/role.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -27,6 +28,8 @@ class _SignupState extends State<Signup> {
         email: emailController.text, password: passwordController.text)
         .then((result) async {
           await Database(uid:result.user.uid).data(emailController.text,nameController.text,phoneController.text);
+          Map map = {'role':'user'};
+          roll = Role.fromJson(map);
          Navigator.popAndPushNamed(context, '/home');
 
     }).catchError((err) {

@@ -22,7 +22,7 @@ class _User_DetailState extends State<User_Detail> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: (){
-                Navigator.popAndPushNamed(context, '/admin');
+                Navigator.pop(context);
               }
           ),
         ),
@@ -30,7 +30,7 @@ class _User_DetailState extends State<User_Detail> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -57,7 +57,7 @@ class _User_DetailState extends State<User_Detail> {
             ),
             SizedBox(height: 10,),
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -84,7 +84,7 @@ class _User_DetailState extends State<User_Detail> {
             ),
             SizedBox(height: 10,),
             Padding(
-              padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+              padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

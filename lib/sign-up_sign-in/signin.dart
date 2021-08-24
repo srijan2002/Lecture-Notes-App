@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../database.dart';
+import 'package:video_app/models/role.dart';
 
 class Signin extends StatefulWidget {
   @override
@@ -27,6 +27,7 @@ class _SigninState extends State<Signin> {
   {
     DocumentReference ref= Firestore.instance.collection('users').document(Doc);
     DocumentSnapshot doc =await ref.get();
+    print(doc['role']);
      return doc['role'];
 
   }
@@ -38,10 +39,17 @@ class _SigninState extends State<Signin> {
         email: emailController.text, password: passwordController.text)
          .then((value) async{
           String x= await Get(firebaseAuth.currentUser.uid);
-          if(x=='user')
-           Navigator.popAndPushNamed(context, '/home');
-          if(x=='admin')
+          print(x);
+          if(x=='user') {
+            Map map = {'role':'user'};
+            roll = Role.fromJson(map);
+            Navigator.popAndPushNamed(context, '/home');
+          }
+          if(x=='admin') {
+            Map map = {'role':'admin'};
+            roll = Role.fromJson(map);
             Navigator.popAndPushNamed(context, '/admin');
+          }
          })
         .catchError((err) {
       showDialog(
@@ -62,16 +70,12 @@ class _SigninState extends State<Signin> {
           });
     });
   }
-
-
-
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +142,6 @@ class _SigninState extends State<Signin> {
                     if (_formKey.currentState.validate()) {
                       print(emailController.text);
                       registerToFb();
-
                     }
                   },
                   child: Padding(
@@ -147,19 +150,14 @@ class _SigninState extends State<Signin> {
                       'Submit',
                       style: TextStyle(
                         fontSize: 15,
-
                       ),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
         ),
       ),
-    );
-
-
-  }
+    );}
 }
