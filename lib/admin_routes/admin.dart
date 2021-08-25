@@ -21,19 +21,22 @@ class _AdminState extends State<Admin> {
     await firebaseAuth.signOut();
     Navigator.popAndPushNamed(context, '/login');
   }
-  List allData=[""];
-  List b= []; List id=[];
+  List allData=[""]; List allId=[''];
+  List b= []; List id=[]; List id2 = [];
   void Getdata()async{
-    j=0; b=[];id=[];
+    j=0; b=[];id=[]; id2=[];
     CollectionReference _collectionRef =
     FirebaseFirestore.instance.collection('users');
     QuerySnapshot querySnapshot = await _collectionRef.get();
     allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    allId =querySnapshot.docs.map((doc) => doc.id).toList();
+
     for(var i=0;i<allData.length;i++) {
       if (allData[i]['role'] != 'admin') {
         setState(() {
           b.add(allData[i]['name']);
           id.add(allData[i]); j++;
+          id2.add(allId[i]);
         });
       }
     }
@@ -42,6 +45,7 @@ class _AdminState extends State<Admin> {
       b=["No Users Yet !"];
     });
   }
+    print(id2);
 
   }
 
@@ -50,7 +54,7 @@ class _AdminState extends State<Admin> {
     return Sizer(
         builder: (context, orientation, deviceType){
           return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: Color(0xFF030310),
             drawer: Drawer(
               child: Container(
                 color: Colors.grey.shade900,
@@ -100,7 +104,7 @@ class _AdminState extends State<Admin> {
             ),
             key: _scaffold,
             appBar: AppBar(
-              backgroundColor: Colors.black,
+              backgroundColor: Color(0xFF030310),
               iconTheme: IconThemeData(
                 color: Colors.white,
                 size: 25.0,
@@ -129,7 +133,7 @@ class _AdminState extends State<Admin> {
                            child: Container(
                              decoration: BoxDecoration(
                                  borderRadius: BorderRadius.circular(12),
-                                 color: Colors.white
+                                 color:(a==1)?Colors.white:Color(0xFF030310)
                              ),
                              child: Padding(
                                padding: const EdgeInsets.all(9.0),
@@ -139,7 +143,7 @@ class _AdminState extends State<Admin> {
                                      fontFamily: 'MontB',
                                      fontSize: 14.sp,
                                      fontWeight: FontWeight.w600,
-                                     color: Colors.black
+                                     color:(a==1)?Color(0xFF030310):Colors.white
                                  ),
                                ),
                              ),
@@ -154,7 +158,7 @@ class _AdminState extends State<Admin> {
                            child: Container(
                              decoration: BoxDecoration(
                                  borderRadius: BorderRadius.circular(12),
-                                 color: Colors.white
+                                 color: (bb==1)?Colors.white:Color(0xFF030310)
                              ),
                              child: Padding(
                                padding: const EdgeInsets.all(9.0),
@@ -164,43 +168,8 @@ class _AdminState extends State<Admin> {
                                      fontFamily: 'MontB',
                                      fontSize: 14.sp,
                                      fontWeight: FontWeight.w600,
-                                     color: Colors.black
+                                     color: (bb==1)?Color(0xFF030310):Colors.white
                                  ),
-                               ),
-                             ),
-                           ),
-                         ),
-                         Container(
-                           decoration: BoxDecoration(
-                               borderRadius: BorderRadius.circular(12),
-                               color: Colors.white
-                           ),
-                           child: Padding(
-                             padding: const EdgeInsets.all(9.0),
-                             child: Text(
-                               "Add",
-                               style: TextStyle(
-                                   fontFamily: 'MontB',
-                                   fontSize: 14.sp,
-                                   fontWeight: FontWeight.w600,
-                                   color: Colors.black
-                               ),
-                             ),
-                           ),
-                         ), Container(
-                           decoration: BoxDecoration(
-                               borderRadius: BorderRadius.circular(12),
-                               color: Colors.white
-                           ),
-                           child: Padding(
-                             padding: const EdgeInsets.all(9.0),
-                             child: Text(
-                               "New",
-                               style: TextStyle(
-                                   fontFamily: 'MontB',
-                                   fontSize: 14.sp,
-                                   fontWeight: FontWeight.w600,
-                                   color: Colors.black
                                ),
                              ),
                            ),
@@ -212,7 +181,7 @@ class _AdminState extends State<Admin> {
                    if(a==1)
                           Expanded(
                             child: Container(
-                               color: Colors.black,
+                               color: Color(0xFF030310),
                                child: ListView.builder(
                                  shrinkWrap: true,
                                  itemCount: b.length,
@@ -226,9 +195,8 @@ class _AdminState extends State<Admin> {
                                        child: InkWell(
                                          onTap: (){
                                           if(j!=0){
-                                            print(id[index]);
                                             user = Data.fromJson(id[index]);
-                                            Navigator.pushNamed(context,'/user_detail');
+                                            Navigator.pushNamed(context,'/user_detail',arguments: {'id':id2[index]});
                                           }
                                          },
                                          child: Container(

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:convert';
+import 'widgets/alertbox.dart';
 import 'models/role.dart';
-String G; List a=["Maths","Physics","Chemistry","Biology"]; List b=[" "];
+import 'widgets/add_category.dart';
+import 'models/category_name.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+ List b=[""]; List allData = [];
 bool vis;
 class Home extends StatefulWidget {
   @override
@@ -23,6 +26,17 @@ class _HomeState extends State<Home> {
         setState(() {currentPage=next;});}
     });
   }
+  int j=0;
+  void Getdata()async{
+    j=0; b=[];
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('categories');
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+    setState(() {
+      allData = querySnapshot.docs.map((doc) => doc.id).toList();
+      j=allData.length;
+    });
+  }
 
  Future <void> logout() async{
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -33,7 +47,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    // print(roll.Role_Type);
+    Getdata();
     vis= (roll.Role_Type=='admin')?true:false;
     return Sizer(
         builder: (context, orientation, deviceType) {
@@ -112,50 +126,29 @@ class _HomeState extends State<Home> {
                         child: PageView.builder(
                             controller: ctrl,
                             scrollDirection: Axis.horizontal,
-                            itemCount: a.length,
+                            itemCount: allData.length,
                             itemBuilder: (context, int ind) {
                               bool active = ind == currentPage;
-                              final double top = active?30:70;
+                              final double top = active?0:30.sp;
                               final double opacity=active?0.7:0;
 
                               return Padding(
                                 padding: const EdgeInsets.fromLTRB(8,8,8,8),
                                 child: InkWell(
                                   onTap: (){
-                                    // getData(a[ind]);
+                                    Map map = {'name':allData[ind]};
+                                    cat = Category_Name.fromJson(map);
                                     Navigator.popAndPushNamed(context, '/category');
                                   },
                                   onLongPress: (){
-                                    showDialog(context: context, builder: (context) {
-                                      return AlertDialog(
-                                        backgroundColor: Colors.black54,
-                                        title: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment
-                                                  .spaceEvenly,
-                                              children: [
-                                                Text(
-                                                  "Delete",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Mont', color: Colors.white70,
-                                                      fontSize: 14.sp, fontWeight: FontWeight.bold
-                                                  ),
-                                                ),
-                                                FlatButton.icon(
-                                                  onPressed: () {
-                                                  },
-                                                  label: Text(""),
-                                                  icon: Icon(Icons.delete,color: Colors.white70,),
-                                                )
-                                              ],),
-                                            CloseButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              color: Colors.white70,
-                                            )],),
-                                      );});
+
+                                    if(roll.Role_Type=='admin'){
+                                      showDialog(context: context, builder: (context) {
+                                        Map map = {'name':allData[ind]};
+                                        cat = Category_Name.fromJson(map);
+                                        return AlertD();
+                                      });
+                                    }
                                   },
                                   child: Container(
                                     width: 38.w,
@@ -182,43 +175,41 @@ class _HomeState extends State<Home> {
                                                 color: Color(0xFFA29F9F),
                                                 height: 220.sp, width: 180.sp,
                                                 child: Center(
-                                                  child: Text(
-                                                    "${a[ind]}",
-                                                    style: TextStyle(
-                                                        fontFamily: 'Mont', fontWeight: FontWeight.bold,
-                                                        color:Colors.white, fontSize: 18
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.all(20.0),
+                                                    child: Text(
+                                                      "${allData[ind]}",
+                                                      style: TextStyle(
+                                                          fontFamily: 'Mont', fontWeight: FontWeight.bold,
+                                                          color:Colors.white, fontSize: 18
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                        ),
-                      ),
-                    ),
-                  ),
+                                                  ),),),),),),
+                                                   ],
+                                    ),),),);
+                            }),),),),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(30, 20, 0, 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white
-                      ),
-                      child: Visibility(
-                        visible: vis,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.black,
-                          )
+                    child: InkWell(
+                      onTap: (){
+                        showDialog(context: context, builder: (context){
+                          return Add_Category();
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white
+                        ),
+                        child: Visibility(
+                          visible: vis,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.black,
+                            )
+                          ),
                         ),
                       ),
                     ),

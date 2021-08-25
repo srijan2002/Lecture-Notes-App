@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_app/models/user.dart';
 import 'package:sizer/sizer.dart';
+import 'package:video_app/services/database.dart';
 
 class User_Detail extends StatefulWidget {
   @override
@@ -8,8 +9,10 @@ class User_Detail extends StatefulWidget {
 }
 
 class _User_DetailState extends State<User_Detail> {
+  Map data={};
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context).settings.arguments;
   return Sizer(
     builder: (context,orientation,deviceType){
       return Scaffold(
@@ -55,7 +58,7 @@ class _User_DetailState extends State<User_Detail> {
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10.sp,),
             Padding(
               padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
               child: Row(
@@ -82,7 +85,7 @@ class _User_DetailState extends State<User_Detail> {
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10.sp,),
             Padding(
               padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
               child: Row(
