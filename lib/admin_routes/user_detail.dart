@@ -17,7 +17,7 @@ class _User_DetailState extends State<User_Detail> {
     builder: (context,orientation,deviceType){
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Color(0xFF190734),
           iconTheme: IconThemeData(
             color: Colors.white,
             size: 25.0,
@@ -29,9 +29,10 @@ class _User_DetailState extends State<User_Detail> {
               }
           ),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xFF190734),
         body: Column(
           children: [
+            SizedBox(height: 30,),
             Padding(
               padding: const EdgeInsets.fromLTRB(5, 0, 20, 0),
               child: Row(
@@ -40,10 +41,10 @@ class _User_DetailState extends State<User_Detail> {
                   Text(
                     "Name :- ",
                     style: TextStyle(
-                        color: Colors.cyanAccent,
+                        color: Color(0xFF9E14F4),
                         fontFamily: 'MontB',
                         fontWeight: FontWeight.w200,
-                        fontSize: 12.sp
+                        fontSize: 13.sp
                     ),
                   ),
                   Text(
@@ -67,10 +68,10 @@ class _User_DetailState extends State<User_Detail> {
                   Text(
                     "Email :- ",
                     style: TextStyle(
-                        color: Colors.cyanAccent,
+                        color: Color(0xFF9E14F4),
                         fontFamily: 'MontB',
                         fontWeight: FontWeight.w200,
-                        fontSize: 12.sp
+                        fontSize: 13.sp
                     ),
                   ),
                   Text(
@@ -94,10 +95,10 @@ class _User_DetailState extends State<User_Detail> {
                   Text(
                     "Phone No. :- ",
                     style: TextStyle(
-                        color: Colors.cyanAccent,
+                        color: Color(0xFF9E14F4),
                         fontFamily: 'MontB',
                         fontWeight: FontWeight.w200,
-                        fontSize: 12.sp
+                        fontSize: 13.sp
                     ),
                   ),
                   Text(

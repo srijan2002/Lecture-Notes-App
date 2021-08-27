@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:better_player/better_player.dart';
+import 'models/video_link.dart';
 class Video extends StatefulWidget {
   @override
   _VideoState createState() => _VideoState();
@@ -19,13 +20,14 @@ class _VideoState extends State<Video> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: (){
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context,'/note_file');
               }
           ),
         ),
         body:  Center(
-          child: BetterPlayer.network('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+          child: BetterPlayer.network('${vid.name}',
             betterPlayerConfiguration: BetterPlayerConfiguration(
+              autoPlay: true,
               aspectRatio: 1,
               fit: BoxFit.contain,
             ),

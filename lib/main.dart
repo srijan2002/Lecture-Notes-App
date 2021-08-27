@@ -10,7 +10,7 @@ import 'sign-up_sign-in/user_type.dart';
 import 'admin_routes/admin.dart';
 import 'sign-up_sign-in/admin_sign.dart';
 import 'admin_routes/user_detail.dart';
-
+import 'note_file.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -26,7 +26,8 @@ void main() async {
       '/user_type':(context)=>User_Type(),
       '/admin':(context)=>Admin(),
       '/admin_sign':(context)=>Admin_Sign(),
-      '/user_detail':(context)=>User_Detail()
+      '/user_detail':(context)=>User_Detail(),
+      '/note_file':(context)=>Note_File()
     },
   ));
 }

@@ -54,10 +54,11 @@ class _HomeState extends State<Home> {
           return Scaffold(
               drawer: Drawer(
                 child: Container(
-                  color: Colors.grey.shade900,
+                  color: Color(0xFF190734),
                   child: ListView(
 
                     children: [
+                      SizedBox(height: 20,),
                       Container(
                         color: Colors.black54,
                         child: ListTile(
@@ -73,7 +74,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 2,),
+                      SizedBox(height: 10,),
                       Container(
                         color: Colors.black54,
                         child: ListTile(
@@ -98,7 +99,8 @@ class _HomeState extends State<Home> {
               ),
               key: _scaffold,
               appBar: AppBar(
-                backgroundColor: Colors.black,
+                elevation: 12,
+                backgroundColor: Color(0xFF0C041A),
                 iconTheme: IconThemeData(
                   color: Colors.white, size: 25.0,
                 ),
@@ -111,7 +113,7 @@ class _HomeState extends State<Home> {
                 title: Text(
                   "Categories",
                   style: TextStyle(
-                      color: Colors.white, fontSize: 22.5,
+                      color: Colors.white, fontSize: 20.5,
                       fontWeight: FontWeight.bold, fontFamily: 'Mont'
                   ),
                 ),
@@ -119,7 +121,7 @@ class _HomeState extends State<Home> {
               body:Stack(
                 children:<Widget> [
                   Container(
-                    color: Colors.black,
+                    color:Color(0xFF0C041A),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0,0,0,0),
                       child: Container(
@@ -164,25 +166,42 @@ class _HomeState extends State<Home> {
                                               boxShadow: [
                                                 BoxShadow(
                                                   color: Colors.white30.withOpacity(opacity),
-                                                  spreadRadius: 0.2, blurRadius: 25.sp,
-                                                  offset: Offset(0, 5), // changes position of shadow
+                                                  spreadRadius: 0.2, blurRadius: 12.sp,
+                                                  offset: Offset(0, 3), // changes position of shadow
                                                 ),
                                               ],),
                                             margin: EdgeInsets.only(top:top,bottom: 0,right: 20,left: 20),
                                             child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(25.sp),
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.zero,
+                                                bottomRight: Radius.zero,
+                                                topRight: Radius.circular(25.sp),
+                                                bottomLeft: Radius.circular(25.sp)
+                                              ),
                                               child: Container(
-                                                color: Color(0xFFA29F9F),
-                                                height: 220.sp, width: 180.sp,
+                                                color: Color(0xFF331957),
+                                                height: 200.sp, width: 150.sp,
                                                 child: Center(
                                                   child: Padding(
                                                     padding: const EdgeInsets.all(20.0),
-                                                    child: Text(
-                                                      "${allData[ind]}",
-                                                      style: TextStyle(
-                                                          fontFamily: 'Mont', fontWeight: FontWeight.bold,
-                                                          color:Colors.white, fontSize: 18
-                                                      ),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.edit,
+                                                          color: Colors.white70,
+                                                        ),
+                                                        Padding(
+                                                          padding: const EdgeInsets.all(8.0),
+                                                          child: Text(
+                                                            "${allData[ind]}",
+                                                            style: TextStyle(
+                                                                fontFamily: 'Mont', fontWeight: FontWeight.bold,
+                                                                color:Colors.white, fontSize: 18
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),),),),),),
                                                    ],
@@ -190,28 +209,78 @@ class _HomeState extends State<Home> {
                             }),),),),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(30, 20, 0, 0),
-                    child: InkWell(
-                      onTap: (){
-                        showDialog(context: context, builder: (context){
-                          return Add_Category();
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
-                        child: Visibility(
-                          visible: vis,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.black,
-                            )
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            showDialog(context: context, builder: (context){
+                              return Add_Category();
+                            });
+                          },
+                          child: Container(
+                            width: 95.sp,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white
+                            ),
+                            child: Visibility(
+                              visible: vis,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: Colors.black,
+                                    ),
+                                    Text(
+                                      "Add New",
+                                      style: TextStyle(
+                                        fontFamily: 'Mont',
+                                        fontWeight: FontWeight.bold
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        SizedBox(width: 7.sp,),
+                        InkWell(
+                          onTap: (){
+                             Navigator.popAndPushNamed(context, '/admin');
+                          },
+                          child: Container(
+                            width: 80.sp,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white
+                            ),
+                            child: Visibility(
+                              visible: vis,
+                              child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.black,
+                                      ),
+                                      Text(
+                                        "Back",
+                                        style: TextStyle(
+                                            fontFamily: 'Mont',
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      )
+                                    ],
+                                  )
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ])

@@ -54,13 +54,14 @@ class _AdminState extends State<Admin> {
     return Sizer(
         builder: (context, orientation, deviceType){
           return Scaffold(
-            backgroundColor: Color(0xFF030310),
+            backgroundColor: Color(0xFF190734),
             drawer: Drawer(
               child: Container(
-                color: Colors.grey.shade900,
+                color: Color(0xFF190734),
                 child: ListView(
 
                   children: [
+                    SizedBox(height: 20,),
                     Container(
                       color: Colors.black54,
                       child: ListTile(
@@ -79,7 +80,7 @@ class _AdminState extends State<Admin> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 2,),
+                    SizedBox(height: 10,),
                     Container(
                       color: Colors.black54,
                       child: ListTile(
@@ -104,7 +105,7 @@ class _AdminState extends State<Admin> {
             ),
             key: _scaffold,
             appBar: AppBar(
-              backgroundColor: Color(0xFF030310),
+              backgroundColor: Color(0xFF190734),
               iconTheme: IconThemeData(
                 color: Colors.white,
                 size: 25.0,
@@ -132,7 +133,12 @@ class _AdminState extends State<Admin> {
                            },
                            child: Container(
                              decoration: BoxDecoration(
-                                 borderRadius: BorderRadius.circular(12),
+                                 borderRadius: BorderRadius.only(
+                                   topLeft: Radius.circular(0.sp),
+                                   topRight: Radius.circular(7.sp),
+                                   bottomLeft: Radius.circular(7.sp),
+                                   bottomRight: Radius.circular(7.sp),
+                                 ),
                                  color:(a==1)?Colors.white:Color(0xFF030310)
                              ),
                              child: Padding(
@@ -157,7 +163,12 @@ class _AdminState extends State<Admin> {
                            },
                            child: Container(
                              decoration: BoxDecoration(
-                                 borderRadius: BorderRadius.circular(12),
+                                 borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(0.sp),
+                                      topRight: Radius.circular(7.sp),
+                                      bottomLeft: Radius.circular(7.sp),
+                                      bottomRight: Radius.circular(7.sp),
+                                    ),
                                  color: (bb==1)?Colors.white:Color(0xFF030310)
                              ),
                              child: Padding(
@@ -181,44 +192,57 @@ class _AdminState extends State<Admin> {
                    if(a==1)
                           Expanded(
                             child: Container(
-                               color: Color(0xFF030310),
-                               child: ListView.builder(
-                                 shrinkWrap: true,
-                                 itemCount: b.length,
-                                 itemBuilder: (context,index){
-                                   return Padding(
-                                     padding: const EdgeInsets.fromLTRB(20, 5, 25, 0),
-                                     child: Card(
-                                       shape: RoundedRectangleBorder(
-                                           borderRadius: BorderRadius.circular(12)
-                                       ),
-                                       child: InkWell(
-                                         onTap: (){
-                                          if(j!=0){
-                                            user = Data.fromJson(id[index]);
-                                            Navigator.pushNamed(context,'/user_detail',arguments: {'id':id2[index]});
-                                          }
-                                         },
-                                         child: Container(
-                                           height: 35,
-                                           width: 60,
+                               decoration: BoxDecoration(
+                                 color: Color(0xFF4E3374),
+                                 borderRadius: BorderRadius.only(
+                                   topLeft: Radius.circular(0.sp),
+                                   topRight: Radius.circular(30.sp),
+                                   bottomLeft: Radius.zero,
+                                   bottomRight: Radius.zero,
+                                 )
+                               ),
+                               child: Padding(
+                                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                 child: ListView.builder(
+                                   shrinkWrap: true,
+                                   itemCount: b.length,
+                                   itemBuilder: (context,index){
+                                     return Padding(
+                                       padding: const EdgeInsets.fromLTRB(20, 5, 25, 0),
+                                       child: Card(
+                                         color: Color(0xFF4E3374),
+                                         elevation: 0.0,
+                                         shape: RoundedRectangleBorder(
+                                             borderRadius: BorderRadius.circular(12),
+                                         ),
+                                         child: InkWell(
+                                           onTap: (){
+                                            if(j!=0){
+                                              user = Data.fromJson(id[index]);
+                                              Navigator.pushNamed(context,'/user_detail',arguments: {'id':id2[index]});
+                                            }
+                                           },
+                                           child: Container(
+                                             height: 35,
+                                             width: 60,
 
-                                           child: Center(
-                                             child: Text(
-                                               "${b[index]}",
-                                               style: TextStyle(
-                                                   color: Colors.black,
-                                                   fontFamily: 'MontB',
-                                                   fontWeight: FontWeight.w600,
-                                                   fontSize: 14
+                                             child: Center(
+                                               child: Text(
+                                                 "${b[index]}",
+                                                 style: TextStyle(
+                                                     color: Colors.white70,
+                                                     fontFamily: 'MontB',
+                                                     fontWeight: FontWeight.w600,
+                                                     fontSize: 13.sp
+                                                 ),
                                                ),
                                              ),
                                            ),
                                          ),
                                        ),
-                                     ),
-                                   );
-                                 },
+                                     );
+                                   },
+                                 ),
                                ),
                              ),
                           )

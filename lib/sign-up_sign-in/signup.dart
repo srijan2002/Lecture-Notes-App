@@ -67,7 +67,7 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
    return Scaffold(
      appBar: AppBar(
-       backgroundColor: Colors.black,
+       backgroundColor: Color(0xFF190734),
        iconTheme: IconThemeData(
          color: Colors.white,
          size: 25.0,

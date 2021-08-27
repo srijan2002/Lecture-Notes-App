@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_app/models/Lesson_Name.dart';
 import 'widgets/add_lesson.dart';
@@ -6,7 +7,9 @@ import 'models/role.dart';
 import 'models/category_name.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'widgets/alert_les.dart';
-List a = [];
+import 'models/video_link.dart';
+
+List a = []; List b=[];
 bool vis;
 class Category extends StatefulWidget {
   @override
@@ -20,12 +23,20 @@ class _CategoryState extends State<Category> {
     DocumentSnapshot doc =await ref.get();
     setState(() {
       a=doc['Lessons'];
-
+      b=doc['Video'];
     });
     if(a.isEmpty)
       setState(() {
         a.add("No Lessons Yet !");
       });
+    int first = a.length;
+    int second=b.length;
+    for(int i=second;i<first;i++)
+      {
+        setState(() {
+          b.add("");
+        });
+      }
   }
   @override
   Widget build(BuildContext context) {
@@ -34,9 +45,9 @@ class _CategoryState extends State<Category> {
     return Sizer(
       builder: (context,orientation,deviceType){
         return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: Color(0xFF0C041A),
             appBar: AppBar(
-              backgroundColor: Colors.black,
+              backgroundColor: Color(0xFF0C041A),
               iconTheme: IconThemeData(
                 color: Colors.white,
                 size: 25.0,
@@ -51,7 +62,7 @@ class _CategoryState extends State<Category> {
                 "Lessons",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22.5,
+                    fontSize: 20.5,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Mont'
                 ),
@@ -69,6 +80,7 @@ class _CategoryState extends State<Category> {
                       });
                     },
                     child: Container(
+                        width: 95.sp,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white
@@ -77,56 +89,88 @@ class _CategoryState extends State<Category> {
                         visible: vis,
                         child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.black,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  color: Colors.black,
+                                ),
+                                Text(
+                                  "Add New",
+                                  style: TextStyle(
+                                      fontFamily: 'Mont',
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                )
+                              ],
                             )
                         ),
                       ),
                     ),
                   ),
                 ),
+                SizedBox(height: 25.sp,),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 30, 15, 10),
-                    child: ListView.builder(
-                      itemCount: a.length,
-                      itemBuilder: (context,index){
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)
-                          ),
-                          color: Colors.white,
-                          child: ListTile(
-                            onLongPress: (){
-                              if(roll.Role_Type=='admin'){
-                                showDialog(context: context, builder: (context) {
-                                  Map map = {'name':a[index]};
-                                  les = Lesson_Name.fromJson(map);
-                                  return Alert_Les();
-                                });
-                              }
-                            },
-                            onTap: (){
-                              if(!(a[0]=="No Lessons Yet !")){
-                                Navigator.pushNamed(context, '/video');
-                              }
-                            },
-                            title: Center(
-                              child: Text(
-                                "${a[index]}",
-                                style: TextStyle(
-                                    fontFamily: 'Mont',
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFF1B0D38),
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30.sp),
+                        topLeft: Radius.circular(30.sp)
+                      )
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 35, 20, 10),
+                      child: ListView.builder(
+                        itemCount: a.length,
+                        itemBuilder: (context,index){
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)
+                            ),
+                            color: Colors.white,
+                            child: ListTile(
+                              onLongPress: (){
+                                if(roll.Role_Type=='admin'){
+                                  showDialog(context: context, builder: (context) {
+                                    Map map = {'name':a[index]};
+                                    les = Lesson_Name.fromJson(map);
+                                    return Alert_Les();
+                                  });
+                                }
+                              },
+                              onTap: (){
+                                if(!(a[0]=="No Lessons Yet !")){
+                                  Map map = {'name':b[index]};
+                                  vid = Video_Link.fromJson(map);
+                                  Navigator.pushNamed(context, '/note_file');
+                                }
+                              },
+                              title: Center(
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 20.sp,),
+                                    Icon(
+                                      Icons.notes
+                                    ),
+                                    SizedBox(width: 20.sp,),
+                                    Text(
+                                      "${a[index]}",
+                                      style: TextStyle(
+                                          fontFamily: 'Mont',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
 
+                      ),
                     ),
                   ),
                 ),

@@ -35,7 +35,7 @@ class _LoginState extends State<Login> {
     return Sizer(
       builder: (context,orientation,deviceType){
         return Scaffold(
-            backgroundColor: Colors.black,
+            backgroundColor: Color(0xFF190734),
             body:AnimatedOpacity(
               opacity: widget1Opacity,
               duration: const Duration(milliseconds: 500),
@@ -78,14 +78,22 @@ class _LoginState extends State<Login> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Mont',
-                                  color: Colors.black,
-                                fontWeight: FontWeight.bold
-                              ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.login
+                                ),
+                                SizedBox(width: 2.sp,),
+                                Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'Mont',
+                                      color: Colors.black,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -101,14 +109,22 @@ class _LoginState extends State<Login> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(12.0),
-                            child: Text(
-                              "Signup",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: 'Mont',
-                                  color: Colors.black,
-                                fontWeight: FontWeight.bold
-                              ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.account_circle
+                                ),
+                                SizedBox(width: 2.sp,),
+                                Text(
+                                  "Signup",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'Mont',
+                                      color: Colors.black,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
