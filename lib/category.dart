@@ -8,8 +8,9 @@ import 'models/category_name.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'widgets/alert_les.dart';
 import 'models/video_link.dart';
+import 'models/file_link.dart';
 
-List a = []; List b=[];
+List a = []; List b=[]; List c=[];
 bool vis;
 class Category extends StatefulWidget {
   @override
@@ -24,6 +25,7 @@ class _CategoryState extends State<Category> {
     setState(() {
       a=doc['Lessons'];
       b=doc['Video'];
+      c=doc['Pdf'];
     });
     if(a.isEmpty)
       setState(() {
@@ -35,6 +37,7 @@ class _CategoryState extends State<Category> {
       {
         setState(() {
           b.add("");
+          c.add("");
         });
       }
   }
@@ -142,7 +145,11 @@ class _CategoryState extends State<Category> {
                               onTap: (){
                                 if(!(a[0]=="No Lessons Yet !")){
                                   Map map = {'name':b[index]};
+                                  Map m = {'name':a[index]};
+                                  Map n = {'name':c[index]};
                                   vid = Video_Link.fromJson(map);
+                                  les = Lesson_Name.fromJson(m);
+                                  fil = File_Link.fromJson(n);
                                   Navigator.pushNamed(context, '/note_file');
                                 }
                               },

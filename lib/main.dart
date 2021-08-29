@@ -11,9 +11,11 @@ import 'admin_routes/admin.dart';
 import 'sign-up_sign-in/admin_sign.dart';
 import 'admin_routes/user_detail.dart';
 import 'note_file.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FlutterDownloader.initialize();
   runApp(MaterialApp(
     home: Login(),
     routes: {

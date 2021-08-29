@@ -27,7 +27,8 @@ class Database {
   Future addcat(String name) async {
     return await catref.document(name).setData({
       'Lessons': FieldValue.arrayUnion([]),
-      'Video': FieldValue.arrayUnion([])
+      'Video': FieldValue.arrayUnion([]),
+      'Pdf':FieldValue.arrayUnion([])
     });
   }
 
@@ -38,7 +39,8 @@ class Database {
   Future addles(String name) async {
     return await catref.document(cat.name).updateData({
       'Lessons': FieldValue.arrayUnion([name]),
-      'Video': FieldValue.arrayUnion([])
+      'Video': FieldValue.arrayUnion([]),
+      'Pdf':FieldValue.arrayUnion([])
     });
   }
 }

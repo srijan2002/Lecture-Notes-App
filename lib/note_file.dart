@@ -1,7 +1,7 @@
+import 'dart:isolate';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:video_app/models/user.dart';
-import 'package:video_app/services/database.dart';
 import 'dart:io';
 import 'models/category_name.dart';
 import 'package:path/path.dart';
@@ -11,14 +11,69 @@ import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'models/video_link.dart';
 import 'models/role.dart';
 import 'package:sizer/sizer.dart';
+import 'package:path_provider/path_provider.dart' as p;
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'models/Lesson_Name.dart';
+import 'models/file_link.dart';
+import 'package:dio/dio.dart';
+
 class Note_File extends StatefulWidget {
   @override
   _Note_FileState createState() => _Note_FileState();
 }
 
 class _Note_FileState extends State<Note_File> {
+
   String msg = "Upload";
   File file; double progress=0.0; String destination; bool vis=false; bool ad = (roll.Role_Type=='admin')?true:false;
+  bool flag = true; bool down = false;   bool b = true;  String filepath = "";bool isLoading = false;
+  Dio dio;
+  @override
+  void initState(){
+    dio=Dio();
+    super.initState();
+  }
+
+  Future <List<Directory>> getExternalStoragePath(){
+    return  p.getExternalStorageDirectories(type: p.StorageDirectory.downloads);
+  }
+
+  Future downloadFile(String url, String filename)async{
+    if(await Permission.storage.isGranted){
+        final dirlist = await getExternalStoragePath();
+        final path = dirlist[0].path;
+        final file = File("/storage/emulated/0/Download/Lecture_Notes/$filename");
+        await dio.download(url, file.path,
+            onReceiveProgress: (rec,total){
+              setState(() {
+                isLoading=true;
+                progress = (rec/total);
+              });
+            });
+        setState(() {
+          filepath ="Saved To:- "+file.path;
+        });
+    }
+    else{
+      var result = await Permission.storage.request();
+      if(result == PermissionStatus.granted)
+        {
+          final dirlist = await getExternalStoragePath();
+          final path = dirlist[0].path;
+          final file = File("/storage/emulated/0/Download/Lecture_Notes/$filename");
+          await dio.download(url, file.path,
+              onReceiveProgress: (rec,total){
+                setState(() {
+                  isLoading=true;
+                  progress = (rec/total);
+                });
+              });
+          setState(() {
+            filepath ="Saved To:- "+file.path;
+          });}
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Sizer(
@@ -40,6 +95,7 @@ class _Note_FileState extends State<Note_File> {
           ),
           body: Center(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 25,),
                 Row(
@@ -112,7 +168,7 @@ class _Note_FileState extends State<Note_File> {
                 ),
                 SizedBox(height: 60,),
                 Visibility(
-                  visible: ad,
+                  visible: b,
                   child: Container(
                     height: 90,
                     width: 90,
@@ -127,77 +183,233 @@ class _Note_FileState extends State<Note_File> {
                     ),
                   ),
                 ),
-                SizedBox(height: 35,),
-                Visibility(
-                  visible: ad,
-                  child: FloatingActionButton.extended(
-                      backgroundColor: Colors.white,
-                      label: Text(
-                        "Add New",
-                        style: TextStyle(
-                            fontFamily: 'MontB',
-                            fontWeight: FontWeight.w600,
-                          color: Colors.black
-                        ),
-                      ),
-                      icon: Icon(
-                        Icons.add,
-                        color: Colors.black,
-                      ),
-                      onPressed: () async{
+                SizedBox(height: 20.sp,),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child:  Container(
 
-                        FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
-                        File file = File(result.files.single.path);
-                        final filename = basename(file.path);
-                        destination = '/lessons/$filename';
-                        final ref = FirebaseStorage.instance.ref();
-                        // await ref.child(destination).putFile(file);
-                        UploadTask task = ref.child(destination).putFile(file);
-                        task.snapshotEvents.listen((event) {
-                          setState(() {
-                            progress = event.bytesTransferred.toDouble()/event.totalBytes.toDouble();
-                            if(progress==1.00)
-                              vis=true;
-                          });
-                        });
-                      }
-                  ),
-                ),
-                SizedBox(height: 20,),
-                SizedBox(height: 30,),
-                Visibility(
-                  visible: (vis&ad),
-                  child: InkWell(
-                    onTap: ()async{
-                      final CollectionReference catref = Firestore.instance.collection('categories');
-                      final ref = FirebaseStorage.instance.ref();
-                      String url=  await ref.child(destination).getDownloadURL();
-                      vid.name=url;
-                      await catref.document(cat.name).updateData({
-                        'Video':FieldValue.arrayUnion([url])
-                      });
-                      setState(() {
-                        msg="Uploaded";
-                      });
-                    },
-                    child: Container(
-                     decoration: BoxDecoration(
-                       color: Colors.white,
-                       borderRadius: BorderRadius.circular(15.sp)
-                     ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
                         child: Text(
-                          "$msg",
+                          "$filepath",
                           style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'MontB',
-                              fontSize: 15
+                            color: Color(0xFFC8C8C8),
+                            fontFamily: 'Mont',
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        width: 250.sp,
+                      ),
+
+                ),
+                SizedBox(height: 50,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Visibility(
+                      visible: ad,
+                      child: FloatingActionButton.extended(
+                          backgroundColor: Colors.white,
+                          label: Text(
+                            "New Video",
+                            style: TextStyle(
+                                fontFamily: 'MontB',
+                                fontWeight: FontWeight.w600,
+                              color: Colors.black
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.add,
+                            color: Colors.black,
+                          ),
+                          onPressed: () async{
+                            flag=true;
+                             setState(() {
+                               msg="Upload";
+                             });
+                            FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                            File file = File(result.files.single.path);
+                            final filename = basename(file.path);
+                            destination = '/lessons/$filename';
+                            final ref = FirebaseStorage.instance.ref();
+                            // await ref.child(destination).putFile(file);
+                            UploadTask task = ref.child(destination).putFile(file);
+                            task.snapshotEvents.listen((event) {
+                              setState(() {
+                                progress = event.bytesTransferred.toDouble()/event.totalBytes.toDouble();
+                                if(progress==1.00)
+                                  vis=true;
+                              });
+                            });
+                          }
+                      ),
+                    ),
+                    SizedBox(width: 10.sp,),
+                    Visibility(
+                      visible: ad,
+                      child: FloatingActionButton.extended(
+                          backgroundColor: Colors.white,
+                          label: Text(
+                            "New File",
+                            style: TextStyle(
+                                fontFamily: 'MontB',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.add,
+                            color: Colors.black,
+                          ),
+                          onPressed: () async{
+                            flag=false;
+                            setState(() {
+                              msg="Upload";
+                            });
+                            FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: false);
+                            File file = File(result.files.single.path);
+                            final filename = basename(file.path);
+                            destination = '/lessons/$filename';
+                            final ref = FirebaseStorage.instance.ref();
+                            // await ref.child(destination).putFile(file);
+                            UploadTask task = ref.child(destination).putFile(file);
+                            task.snapshotEvents.listen((event) {
+                              setState(() {
+                                progress = event.bytesTransferred.toDouble()/event.totalBytes.toDouble();
+                                if(progress==1.00)
+                                  vis=true;
+                              });
+                            });
+                          }
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 70,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        setState(() {
+                          b=true;
+                          filepath="";
+                        });
+
+                        if(vid.name!="")
+                          downloadFile(vid.name,(les.name+"_Video"));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.sp)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.download,
+                                size: 15.sp,
+                              ),
+                              Text(
+                                "Lesson",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'MontB',
+                                    fontSize: 15
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 12.sp,
+                    ),
+                    Visibility(
+                      visible: (vis&ad),
+                      child: InkWell(
+                        onTap: ()async{
+                          final CollectionReference catref = Firestore.instance.collection('categories');
+                          final ref = FirebaseStorage.instance.ref();
+                          String url=  await ref.child(destination).getDownloadURL();
+                          vid.name=url;
+                          if(flag==true)
+                            {
+                              await catref.document(cat.name).updateData({
+                                'Video':FieldValue.arrayUnion([url]),
+                              });
+                            }
+                          else{
+                            await catref.document(cat.name).updateData({
+                              'Pdf':FieldValue.arrayUnion([url])
+                            });
+                          }
+                          setState(() {
+                            msg="Uploaded";
+                          });
+                        },
+                        child: Container(
+                         decoration: BoxDecoration(
+                           color: Colors.white,
+                           borderRadius: BorderRadius.circular(15.sp)
+                         ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Text(
+                              "$msg",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'MontB',
+                                  fontSize: 15
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 12.sp,
+                    ),
+                    InkWell(
+                      onTap: (){
+                        setState(() {
+                          b=true;
+                          filepath="";
+                        });
+                        print(b);
+
+                        if(fil.name!="")
+                          downloadFile(fil.name,(les.name+"_Notes"));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15.sp)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.download,
+                                size: 15.sp,
+                              ),
+                              Text(
+                                "Notes",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'MontB',
+                                    fontSize: 15
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 )
 
               ],
