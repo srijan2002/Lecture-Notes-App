@@ -16,7 +16,11 @@ Download and Install Flutter SDK from GitHub Flutter repo:
 ```
 git clone https://github.com/flutter/flutter.git
 ```
-Run:
+Clone this project:
+```
+https://github.com/srijan2002/Lecture-Notes-App.git
+```
+In your project directory, run:
 ```
 flutter doctor
 
