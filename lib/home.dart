@@ -174,12 +174,12 @@ class _HomeState extends State<Home> {
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.only(
                                                 topLeft: Radius.zero,
-                                                bottomRight: Radius.zero,
+                                                bottomRight: Radius.circular(25.sp),
                                                 topRight: Radius.circular(25.sp),
                                                 bottomLeft: Radius.circular(25.sp)
                                               ),
                                               child: Container(
-                                                color: Color(0xFF331957),
+                                                color: Color(0xFF3B1D6A),
                                                 height: 200.sp, width: 150.sp,
                                                 child: Center(
                                                   child: Padding(

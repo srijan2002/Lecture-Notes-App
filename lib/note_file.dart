@@ -40,6 +40,9 @@ class _Note_FileState extends State<Note_File> {
   }
 
   Future downloadFile(String url, String filename)async{
+    setState(() {
+      filepath="Downloading file to internal storage media";
+    });
     if(await Permission.storage.isGranted){
         final dirlist = await getExternalStoragePath();
         final path = dirlist[0].path;
@@ -133,37 +136,7 @@ class _Note_FileState extends State<Note_File> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8.sp,),
-                    InkWell(
-                      onTap: (){
-                      },
-                      child: Container(
-                        width: 110.sp,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12)
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.attach_file_sharp, color: Colors.black,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                "Files",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'MontB',
-                                    fontSize: 15
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    SizedBox(width: 8.sp,)
                   ],
                 ),
                 SizedBox(height: 60,),
@@ -179,7 +152,12 @@ class _Note_FileState extends State<Note_File> {
                       borderColor: Color(0xFF3D1B94),
                       borderWidth: 5.0,
                       direction: Axis.vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
-                      center: Text("${(progress * 100).toStringAsFixed(2)} %"),
+                      center: Text(
+                          "${(progress * 100).toStringAsFixed(2)} %",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
                     ),
                   ),
                 ),

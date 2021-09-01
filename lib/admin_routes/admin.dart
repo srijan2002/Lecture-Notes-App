@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:video_app/models/user.dart';
-import 'dart:convert';
 
 
 class Admin extends StatefulWidget {
@@ -45,7 +44,7 @@ class _AdminState extends State<Admin> {
       b=["No Users Yet !"];
     });
   }
-    print(id2);
+
 
   }
 
@@ -191,60 +190,80 @@ class _AdminState extends State<Admin> {
                    SizedBox(height: 40,),
                    if(a==1)
                           Expanded(
-                            child: Container(
-                               decoration: BoxDecoration(
-                                 color: Color(0xFF4E3374),
-                                 borderRadius: BorderRadius.only(
-                                   topLeft: Radius.circular(0.sp),
-                                   topRight: Radius.circular(30.sp),
-                                   bottomLeft: Radius.zero,
-                                   bottomRight: Radius.zero,
-                                 )
-                               ),
-                               child: Padding(
-                                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                                 child: ListView.builder(
-                                   shrinkWrap: true,
-                                   itemCount: b.length,
-                                   itemBuilder: (context,index){
-                                     return Padding(
-                                       padding: const EdgeInsets.fromLTRB(20, 5, 25, 0),
-                                       child: Card(
-                                         color: Color(0xFF4E3374),
-                                         elevation: 0.0,
-                                         shape: RoundedRectangleBorder(
-                                             borderRadius: BorderRadius.circular(12),
-                                         ),
-                                         child: InkWell(
-                                           onTap: (){
-                                            if(j!=0){
-                                              user = Data.fromJson(id[index]);
-                                              Navigator.pushNamed(context,'/user_detail',arguments: {'id':id2[index]});
-                                            }
-                                           },
-                                           child: Container(
-                                             height: 35,
-                                             width: 60,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              child: Container(
+                                 decoration: BoxDecoration(
+                                   color: Color(0xFF4E3374),
+                                   borderRadius: BorderRadius.only(
+                                     topLeft: Radius.circular(30.sp),
+                                     topRight: Radius.circular(30.sp),
+                                     bottomLeft: Radius.zero,
+                                     bottomRight: Radius.zero,
+                                   )
+                                 ),
+                                 child: Padding(
+                                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                   child: ListView.builder(
+                                     shrinkWrap: true,
+                                     itemCount: b.length,
+                                     itemBuilder: (context,index){
+                                       return Padding(
+                                         padding: const EdgeInsets.fromLTRB(20, 5, 25, 0),
+                                         child: Card(
+                                           color: Color(0xFF4E3374),
+                                           elevation: 0.0,
+                                           shape: RoundedRectangleBorder(
+                                               borderRadius: BorderRadius.circular(12),
+                                           ),
+                                           child: InkWell(
+                                             onTap: (){
+                                              if(j!=0){
+                                                user = Data.fromJson(id[index]);
+                                                Navigator.pushNamed(context,'/user_detail',arguments: {'id':id2[index]});
+                                              }
+                                             },
+                                             child: Container(
+                                               height: 35,
+                                               width: 60,
 
-                                             child: Center(
-                                               child: Text(
-                                                 "${b[index]}",
-                                                 style: TextStyle(
-                                                     color: Colors.white70,
-                                                     fontFamily: 'MontB',
-                                                     fontWeight: FontWeight.w600,
-                                                     fontSize: 13.sp
+                                               child: Center(
+                                                 child: Padding(
+                                                   padding: const EdgeInsets.fromLTRB(55, 0, 0, 0),
+                                                   child: Row(
+                                                     mainAxisAlignment: MainAxisAlignment.start,
+                                                     children: [
+                                                       Text(
+                                                         "${index+1}.    ",
+                                                         style: TextStyle(
+                                                             color: Colors.white70,
+                                                             fontFamily: 'MontB',
+                                                             fontWeight: FontWeight.w600,
+                                                             fontSize: 13.sp
+                                                         ),
+                                                       ),
+                                                       Text(
+                                                         "${b[index]}",
+                                                         style: TextStyle(
+                                                             color: Colors.white70,
+                                                             fontFamily: 'MontB',
+                                                             fontWeight: FontWeight.w600,
+                                                             fontSize: 13.sp
+                                                         ),
+                                                       ),
+                                                     ],
+                                                   ),
                                                  ),
                                                ),
                                              ),
                                            ),
                                          ),
-                                       ),
-                                     );
-                                   },
+                                       );
+                                     },
+                                   ),
                                  ),
                                ),
-                             ),
+                            ),
                           )
                    else
                      Padding(
